@@ -385,5 +385,18 @@ describe('Observable.webSocket', () => {
 
       expect(socket.close).toHaveBeenCalled();
     });
+
+    it('should not throw if the underlying WebSocket closes', () => {
+      const error = { wasClean: false };
+
+      const subject = Observable.webSocket(<any>{url: 'ws://mysocket'})
+      .multiplex(() => 'sub', () => 'unsub', () => true);
+
+      subject.subscribe(() => console.log('here'));
+
+      let socket = MockWebSocket.lastSocket;
+
+      socket.triggerClose(error);
+    });
   });
 });

@@ -103,7 +103,7 @@ export class WebSocketSubject<T> extends Subject<T> {
         const result = tryCatch(unsubMsg)();
         if (result === errorObject) {
           observer.error(errorObject.e);
-        } else {
+        } else if (self.socket.readyState < 3) {
           self.next(result);
         }
         subscription.unsubscribe();
